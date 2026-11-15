@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Olympic Hotel Gondar — Swagger API Documentation & Testing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E3A725'><path d='M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z'/></svg>">
+  
+  <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Swagger UI CSS -->
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css">
+
+  <style>
+    :root {
+      --color-gold: #E3A725;
+      --color-gold-dark: #C98E15;
+      --color-ivory: #FAF8F3;
+      --color-dark: #081A13;
+      --color-charcoal: #1A1D21;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--color-ivory);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--color-charcoal);
+    }
+
+    /* Custom Header */
+    .hotel-header {
+      background-color: var(--color-dark);
+      border-bottom: 2px solid var(--color-gold);
+      padding: 16px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--color-ivory);
+      border: 2px solid var(--color-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-gold);
+    }
+
+    .brand-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin: 0;
+      color: #FFFFFF;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-text span {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--color-gold);
+      font-weight: 600;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .pill-gold {
+      background-color: var(--color-gold);
+      color: #090D16;
+      box-shadow: 0 2px 10px rgba(227, 167, 37, 0.35);
+    }
+
+    .pill-gold:hover {
+      background-color: var(--color-gold-dark);
+      transform: translateY(-1px);
+    }
+
+    .pill-outline {
+      background-color: rgba(255,255,255,0.08);
+      color: #FFFFFF;
+      border: 1px solid rgba(227, 167, 37, 0.4);
+    }
+
+    .pill-outline:hover {
+      background-color: rgba(255,255,255,0.15);
+      border-color: var(--color-gold);
+    }
+
+    /* Swagger UI Custom Theming */
+    .swagger-ui {
+      background-color: var(--color-ivory);
+      padding: 20px 0;
+    }
+
+    .swagger-ui .topbar {
+      display: none !important;
+    }
+
+    .swagger-ui .info {
+      margin: 20px 0 30px 0;
+    }
+
+    .swagger-ui .info .title {
+      font-family: 'Playfair Display', serif;
+      color: var(--color-charcoal);
+      font-size: 32px;
+    }
+
+    .swagger-ui .opblock.opblock-get {
+      border-color: #2e7d32;
+      background: rgba(46, 125, 50, 0.04);
+    }
+
+    .swagger-ui .opblock.opblock-post {
+      border-color: #E3A725;
+      background: rgba(227, 167, 37, 0.06);
+    }
+
+    .swagger-ui .opblock.opblock-delete {
+      border-color: #c62828;
+      background: rgba(198, 40, 40, 0.04);
+    }
+
+    .swagger-ui .btn.execute {
+      background-color: var(--color-gold);
+      border-color: var(--color-gold);
+      color: #090D16;
+      font-weight: 700;
+      border-radius: 9999px;
+      padding: 8px 24px;
+    }
+
+    .swagger-ui .btn.execute:hover {
+      background-color: var(--color-gold-dark);
+    }
+
+    .swagger-ui .btn.try-out__btn {
+      border-radius: 9999px;
+    }
+
+    .swagger-ui .scheme-container {
+      background-color: #FFFFFF;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      margin-bottom: 24px;
+      padding: 16px 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="hotel-header">
+    <a href="/" class="brand-title">
+      <div class="brand-logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="6" cy="9" r="3.5" />
+          <circle cx="12" cy="9" r="3.5" />
+          <circle cx="18" cy="9" r="3.5" />
+          <path d="M9 13.5a3.5 3.5 0 0 0 6 0" />
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>OLYMPIC HOTEL GONDAR</h1>
+        <span>OpenAPI 3.0 • Testing Suite</span>
+      </div>
+    </a>
+
+    <div class="header-actions">
+      <a href="/openapi.json" target="_blank" class="pill-btn pill-outline">
+        <span>Raw OpenAPI Spec (JSON)</span>
+      </a>
+      <a href="/" class="pill-btn pill-gold">
+        <span>← Return to Hotel Website</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Swagger UI Mount Point -->
+  <div id="swagger-ui"></div>
+
+  <!-- Swagger UI JavaScript Bundle -->
+  <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js" charset="UTF-8"></script>
+  <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js" charset="UTF-8"></script>
+
+  <script>
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
+        url: "/openapi.json",
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "BaseLayout",
+        defaultModelsExpandDepth: 1,
+        defaultModelExpandDepth: 1,
+        displayRequestDuration: true,
+        docExpansion: "list",
+        filter: true,
+        showExtensions: true,
+        showCommonExtensions: true,
+        tryItOutEnabled: true
+      });
+      window.ui = ui;
+    };
+  </script>
+</body>
+</html>

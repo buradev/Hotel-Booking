@@ -1,0 +1,586 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Olympic Hotel Gondar — Booking & Concierge API",
+    "description": "Comprehensive testing and integration API documentation for Olympic Hotel in Gondar, Ethiopia. Supports real-time room availability checks, reservation creation, currency rate calculations (USD/ETB), airport shuttle scheduling at Gondar Atse Tewodros Airport (GDQ), and concierge tour inquiries.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Olympic Hotel Front Office & IT",
+      "email": "reservations@olympichotelgondar.com",
+      "url": "http://localhost:8080"
+    },
+    "license": {
+      "name": "Proprietary - Olympic Hotel Gondar",
+      "url": "http://localhost:8080"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local Testing & Development Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Rooms & Inventory",
+      "description": "Browse room types, query availability, and view amenities"
+    },
+    {
+      "name": "Bookings & Reservations",
+      "description": "Calculate rates, create bookings, and retrieve confirmation vouchers"
+    },
+    {
+      "name": "Airport Shuttle Service",
+      "description": "Schedule and track door-to-door transfers to/from Gondar Airport (GDQ)"
+    },
+    {
+      "name": "Concierge & Heritage Tours",
+      "description": "Simien Mountains trekking, Fasil Ghebbi passes, and Buna coffee ceremony inquiries"
+    },
+    {
+      "name": "Hotel Metadata & Currency",
+      "description": "General hotel information, operating hours, and USD to ETB conversion rates"
+    }
+  ],
+  "paths": {
+    "/api/rooms": {
+      "get": {
+        "tags": ["Rooms & Inventory"],
+        "summary": "List all room types and accommodations",
+        "description": "Returns full details for all available rooms at Olympic Hotel, including guest capacity, bed configurations, pricing in USD and ETB, and signature amenities.",
+        "operationId": "getRooms",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter by room category",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["all", "deluxe", "executive", "suite", "standard", "family"]
+            }
+          },
+          {
+            "name": "guests",
+            "in": "query",
+            "description": "Minimum guest capacity",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved list of rooms",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Room"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rooms/{roomId}": {
+      "get": {
+        "tags": ["Rooms & Inventory"],
+        "summary": "Get specific room details by ID",
+        "description": "Retrieve comprehensive specifications, image galleries, and amenity checklists for a given room.",
+        "operationId": "getRoomById",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier of the room",
+            "schema": {
+              "type": "string",
+              "enum": ["deluxe-king", "executive-twin", "royal-imperial-suite", "standard-comfort-queen", "family-garden-suite", "junior-terrace-suite"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Room details found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Room not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rooms/{roomId}/availability": {
+      "get": {
+        "tags": ["Rooms & Inventory"],
+        "summary": "Check room availability for selected dates",
+        "operationId": "checkAvailability",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "checkIn",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-11-20"
+            }
+          },
+          {
+            "name": "checkOut",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-11-23"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Availability status retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "roomId": { "type": "string" },
+                    "isAvailable": { "type": "boolean" },
+                    "availableUnits": { "type": "integer" },
+                    "nights": { "type": "integer" },
+                    "ratePerNightUSD": { "type": "number" },
+                    "totalEstimatedUSD": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bookings/calculate-rate": {
+      "post": {
+        "tags": ["Bookings & Reservations"],
+        "summary": "Calculate pricing breakdown with taxes and inclusions",
+        "description": "Computes exact room rates, number of nights, 15% VAT and service charges, breakfast savings, and conversions in USD and ETB.",
+        "operationId": "calculateRate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RateCalculationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rate calculation completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateCalculationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bookings": {
+      "post": {
+        "tags": ["Bookings & Reservations"],
+        "summary": "Create a new reservation / booking voucher",
+        "description": "Reserves a room, registers guest details, schedules airport shuttle if requested, and generates an official voucher with confirmation code (e.g. OLY-GDR-84291).",
+        "operationId": "createBooking",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Reservation created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingConfirmation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid booking parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bookings/{confirmationCode}": {
+      "get": {
+        "tags": ["Bookings & Reservations"],
+        "summary": "Retrieve booking voucher details by reference code",
+        "operationId": "getBookingByCode",
+        "parameters": [
+          {
+            "name": "confirmationCode",
+            "in": "path",
+            "required": true,
+            "description": "Confirmation code formatted like OLY-GDR-XXXXX",
+            "schema": {
+              "type": "string",
+              "example": "OLY-GDR-84291"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking voucher retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingConfirmation"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Reservation code not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Bookings & Reservations"],
+        "summary": "Cancel an existing reservation",
+        "operationId": "cancelBooking",
+        "parameters": [
+          {
+            "name": "confirmationCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "OLY-GDR-84291"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reservation cancelled successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "confirmationCode": { "type": "string" },
+                    "status": { "type": "string", "example": "CANCELLED" },
+                    "message": { "type": "string", "example": "Your reservation has been cancelled in accordance with hotel policy." }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shuttle/request": {
+      "post": {
+        "tags": ["Airport Shuttle Service"],
+        "summary": "Request Gondar Airport (GDQ) shuttle transfer",
+        "description": "Registers arrival flight details and passenger count for complimentary greeting by an Olympic Hotel chauffeur.",
+        "operationId": "requestShuttle",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShuttleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shuttle pickup scheduled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shuttleRequestId": { "type": "string", "example": "SHT-GDQ-1049" },
+                    "status": { "type": "string", "example": "CONFIRMED" },
+                    "pickupLocation": { "type": "string", "example": "Gondar Atse Tewodros Airport (GDQ) Arrival Terminal" },
+                    "driverAssigned": { "type": "string", "example": "Olympic Hotel Executive Van #2" },
+                    "notes": { "type": "string", "example": "Driver will hold a name sign at baggage claim." }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contact": {
+      "post": {
+        "tags": ["Concierge & Heritage Tours"],
+        "summary": "Submit general inquiry or tour request",
+        "operationId": "submitContactInquiry",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message received by concierge",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "inquiryId": { "type": "string", "example": "INQ-2026-993" },
+                    "status": { "type": "string", "example": "RECEIVED" },
+                    "message": { "type": "string", "example": "Thank you. Our front office in Gondar will contact you within 2 hours." }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hotel/info": {
+      "get": {
+        "tags": ["Hotel Metadata & Currency"],
+        "summary": "Get hotel contact info, location coordinates, and policies",
+        "operationId": "getHotelInfo",
+        "responses": {
+          "200": {
+            "description": "Hotel metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HotelInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hotel/exchange-rate": {
+      "get": {
+        "tags": ["Hotel Metadata & Currency"],
+        "summary": "Get current USD to ETB conversion rate",
+        "operationId": "getExchangeRate",
+        "responses": {
+          "200": {
+            "description": "Current exchange rate details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "baseCurrency": { "type": "string", "example": "USD" },
+                    "targetCurrency": { "type": "string", "example": "ETB" },
+                    "rate": { "type": "number", "example": 135.0 },
+                    "lastUpdated": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Room": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "deluxe-king" },
+          "title": { "type": "string", "example": "Deluxe King Room" },
+          "category": { "type": "string", "example": "deluxe" },
+          "tag": { "type": "string", "example": "Best Seller" },
+          "badge": { "type": "string", "example": "Mountain & Garden View" },
+          "priceUSD": { "type": "number", "example": 68 },
+          "priceETB": { "type": "number", "example": 9180 },
+          "guests": { "type": "string", "example": "Up to 2 Guests" },
+          "maxGuests": { "type": "integer", "example": 2 },
+          "bed": { "type": "string", "example": "1 Plush King Bed (Orthopedic)" },
+          "size": { "type": "string", "example": "34 m² / 366 sq ft" },
+          "description": { "type": "string" },
+          "highlights": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "amenities": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "RateCalculationRequest": {
+        "type": "object",
+        "required": ["roomId", "checkIn", "checkOut", "guests"],
+        "properties": {
+          "roomId": { "type": "string", "example": "deluxe-king" },
+          "checkIn": { "type": "string", "format": "date", "example": "2026-11-20" },
+          "checkOut": { "type": "string", "format": "date", "example": "2026-11-23" },
+          "guests": { "type": "integer", "example": 2 }
+        }
+      },
+      "RateCalculationResponse": {
+        "type": "object",
+        "properties": {
+          "roomId": { "type": "string" },
+          "nights": { "type": "integer", "example": 3 },
+          "ratePerNightUSD": { "type": "number", "example": 68 },
+          "subtotalUSD": { "type": "number", "example": 204 },
+          "vatTaxUSD": { "type": "number", "example": 31 },
+          "grandTotalUSD": { "type": "number", "example": 235 },
+          "grandTotalETB": { "type": "number", "example": 31725 },
+          "complimentaryInclusions": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": ["Daily Highland Breakfast Buffet", "Gondar Airport Shuttle Transfer", "High-Speed Fiber Wi-Fi"]
+          }
+        }
+      },
+      "BookingRequest": {
+        "type": "object",
+        "required": ["fullName", "email", "phone", "roomId", "checkIn", "checkOut", "guests"],
+        "properties": {
+          "fullName": { "type": "string", "example": "Dr. Helen Bekele" },
+          "email": { "type": "string", "format": "email", "example": "helen.bekele@uog.edu.et" },
+          "phone": { "type": "string", "example": "+251 91 800 2233" },
+          "roomId": { "type": "string", "example": "deluxe-king" },
+          "checkIn": { "type": "string", "format": "date", "example": "2026-11-20" },
+          "checkOut": { "type": "string", "format": "date", "example": "2026-11-23" },
+          "guests": { "type": "integer", "example": 2 },
+          "needsAirportShuttle": { "type": "boolean", "default": true },
+          "flightNumber": { "type": "string", "example": "ET 122" },
+          "specialRequests": { "type": "string", "example": "High floor quiet room with mountain view" }
+        }
+      },
+      "BookingConfirmation": {
+        "type": "object",
+        "properties": {
+          "confirmationCode": { "type": "string", "example": "OLY-GDR-84291" },
+          "status": { "type": "string", "example": "CONFIRMED" },
+          "guestName": { "type": "string", "example": "Dr. Helen Bekele" },
+          "email": { "type": "string", "example": "helen.bekele@uog.edu.et" },
+          "phone": { "type": "string", "example": "+251 91 800 2233" },
+          "room": { "$ref": "#/components/schemas/Room" },
+          "checkIn": { "type": "string", "example": "2026-11-20 (14:00)" },
+          "checkOut": { "type": "string", "example": "2026-11-23 (11:30)" },
+          "nights": { "type": "integer", "example": 3 },
+          "guests": { "type": "integer", "example": 2 },
+          "totalUSD": { "type": "number", "example": 235 },
+          "totalETB": { "type": "number", "example": 31725 },
+          "airportShuttleScheduled": { "type": "boolean", "example": true },
+          "flightNumber": { "type": "string", "example": "ET 122" },
+          "hotelAddress": { "type": "string", "example": "Maraki Sub-City, Gondar, Ethiopia" }
+        }
+      },
+      "ShuttleRequest": {
+        "type": "object",
+        "required": ["bookingReference", "guestName", "flightNumber", "arrivalDate", "arrivalTime", "passengers"],
+        "properties": {
+          "bookingReference": { "type": "string", "example": "OLY-GDR-84291" },
+          "guestName": { "type": "string", "example": "Dr. Helen Bekele" },
+          "flightNumber": { "type": "string", "example": "ET 122" },
+          "arrivalDate": { "type": "string", "format": "date", "example": "2026-11-20" },
+          "arrivalTime": { "type": "string", "example": "14:45" },
+          "passengers": { "type": "integer", "example": 2 }
+        }
+      },
+      "ContactMessage": {
+        "type": "object",
+        "required": ["name", "email", "subject", "message"],
+        "properties": {
+          "name": { "type": "string", "example": "Alistair Campbell" },
+          "email": { "type": "string", "format": "email", "example": "acampbell@ucl.ac.uk" },
+          "phone": { "type": "string", "example": "+44 20 7946 0912" },
+          "subject": { "type": "string", "example": "Simien Trek Guidance & Storage" },
+          "message": { "type": "string", "example": "We plan a 4-day trek to Simien mountains. Can we store luggage and reserve rooms for before and after?" }
+        }
+      },
+      "HotelInfo": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "Olympic Hotel" },
+          "city": { "type": "string", "example": "Gondar" },
+          "country": { "type": "string", "example": "Ethiopia" },
+          "neighborhood": { "type": "string", "example": "Maraki Sub-City (near University campus)" },
+          "phonePrimary": { "type": "string", "example": "+251 58 114 8890" },
+          "whatsapp": { "type": "string", "example": "+251918002233" },
+          "email": { "type": "string", "example": "reservations@olympichotelgondar.com" },
+          "checkInTime": { "type": "string", "example": "14:00" },
+          "checkOutTime": { "type": "string", "example": "11:30" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "example": "RESOURCE_NOT_FOUND" },
+          "message": { "type": "string", "example": "Requested room or booking code was not found." }
+        }
+      }
+    }
+  }
+}

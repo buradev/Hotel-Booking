@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-hotel-gold: #E3A725;
+    --color-hotel-gold-dark: #C98E15;
+    --color-warm-ivory: #FAF8F3;
+    --color-soft-ivory: #FCFAF7;
+    --color-charcoal-ink: #1A1D21;
+    --color-charcoal-muted: #5A5D64;
+    --color-stone-gray: #969592;
+    --color-deep-forest: #081A13;
+  }
+
+  body {
+    background-color: #FAF8F3;
+    color: #1A1D21;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  h1, h2, h3, .font-editorial {
+    font-family: 'Playfair Display', Georgia, Cambria, "Times New Roman", serif;
+  }
+}
+
+/* Custom design system utility styles */
+.font-editorial {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-sans-clean {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Soft gold glow and pill button shadows from Florida design system */
+.shadow-gold-soft {
+  box-shadow: 0 8px 24px -4px rgba(227, 167, 37, 0.28);
+}
+
+.shadow-card-soft {
+  box-shadow: 0 4px 20px -2px rgba(26, 29, 33, 0.05);
+}
+
+.shadow-card-hover {
+  box-shadow: 0 16px 36px -6px rgba(26, 29, 33, 0.1);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F3;
+}
+::-webkit-scrollbar-thumb {
+  background: #E3A725;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C98E15;
+}
