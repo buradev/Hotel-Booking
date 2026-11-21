@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <title>Olympic Hotel Gondar — Swagger API Documentation & Testing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Hostname guard: Only accessible in local development environments -->
+  <script>
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      window.location.replace('/');
+    }
+  </script>
+
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E3A725'><path d='M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z'/></svg>">
   
   <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
@@ -195,7 +203,7 @@
       </div>
       <div class="brand-text">
         <h1>OLYMPIC HOTEL GONDAR</h1>
-        <span>OpenAPI 3.0 • Testing Suite</span>
+        <span>Local Testing Environment</span>
       </div>
     </a>
 

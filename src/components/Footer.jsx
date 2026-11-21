@@ -75,17 +75,6 @@ export function Footer() {
               <li>
                 <a href="#reserve" className="hover:text-[#E3A725] transition-colors text-[#E3A725] font-semibold">Make a Booking Enquiry</a>
               </li>
-              <li className="pt-2">
-                <a 
-                  href="/swagger.html" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E3A725]/20 hover:bg-[#E3A725] text-[#E3A725] hover:text-[#090D16] border border-[#E3A725]/40 font-semibold transition-all text-xs"
-                >
-                  <span>Swagger API Testing</span>
-                  <span>↗</span>
-                </a>
-              </li>
             </ul>
           </div>
 
