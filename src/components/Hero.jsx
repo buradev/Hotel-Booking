@@ -127,9 +127,10 @@ export function Hero({ onOpenBooking, onSearchAvailability }) {
         </a>
       </section>
 
-      {/* Room Availability Check Quick Bar (Right Below Hero) */}
-      <div id="availability-bar" className="relative -mt-10 sm:-mt-14 z-30 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sm:mb-12">
-        <div className="bg-white rounded-3xl lg:rounded-full p-4 lg:p-3 shadow-[0_15px_45px_rgba(26,29,33,0.12)] border border-[#EFE9DC]">
+      {/* Room Availability Check Section (Right Below Hero Image - Zero Overlap) */}
+      <section id="availability-bar" className="w-full bg-[#FAF8F3] py-8 sm:py-10 border-b border-[#EFE9DC] relative z-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-3xl lg:rounded-full p-4 lg:p-3 shadow-[0_15px_45px_rgba(26,29,33,0.08)] border border-[#EFE9DC]">
           <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
             {/* Check-In */}
             <div className="lg:col-span-3 px-4 py-2 border-b sm:border-b-0 sm:border-r border-gray-100 flex flex-col justify-center">
@@ -210,6 +211,7 @@ export function Hero({ onOpenBooking, onSearchAvailability }) {
           </form>
         </div>
       </div>
-    </>
+    </section>
+  </>
   );
 }

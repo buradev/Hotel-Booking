@@ -32,11 +32,11 @@ export function Navbar({ onOpenBooking }) {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-      {/* Top micro announcement bar - dark translucent on hero, collapses on scroll */}
+      {/* Top micro announcement bar - transparent dark glass on hero, collapses on scroll */}
       <div className={`transition-all duration-300 overflow-hidden ${
         isScrolled 
           ? 'max-h-0 opacity-0 py-0 border-none' 
-          : 'max-h-12 opacity-100 bg-black/60 backdrop-blur-md text-[#FAF8F3] text-xs py-2 px-4 border-b border-white/10'
+          : 'max-h-12 opacity-100 bg-black/40 backdrop-blur-md text-[#FAF8F3] text-xs py-2 px-4 border-b border-white/10'
       }`}>
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3">
@@ -62,19 +62,17 @@ export function Navbar({ onOpenBooking }) {
         </div>
       </div>
 
-      {/* Main Glassmorphic Header (Top: Vignette over hero | Scrolled: Style 1 Sheer Frosted Glass) */}
+      {/* Main Fully Glassmorphic & Transparent Header (Hero-Style dark glass throughout with intense backdrop-blur-2xl) */}
       <header className={`transition-all duration-300 ${
         isScrolled 
-          ? 'bg-[#FAF8F3]/85 backdrop-blur-2xl shadow-[0_10px_35px_rgba(26,29,33,0.06)] border-b border-[#E3A725]/25 py-3 text-[#1A1D21]' 
-          : 'bg-gradient-to-b from-black/85 via-black/45 to-transparent shadow-none border-b border-white/10 py-4 text-white'
+          ? 'bg-black/50 backdrop-blur-2xl backdrop-saturate-150 border-b border-white/15 shadow-[0_10px_35px_rgba(0,0,0,0.4)] py-3 text-white' 
+          : 'bg-black/25 backdrop-blur-md border-b border-white/10 py-4 text-white'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           
           {/* Logo & Brand Identity */}
           <a href="#hero" className="flex items-center gap-3 group">
-            <div className={`w-10 h-10 rounded-full border-2 border-[#E3A725] flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform ${
-              isScrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-black/40 backdrop-blur-md'
-            }`}>
+            <div className="w-10 h-10 rounded-full border-2 border-[#E3A725] bg-black/40 backdrop-blur-md flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
               <svg className="w-6 h-6 text-[#E3A725]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="6" cy="9" r="3.5" />
                 <circle cx="12" cy="9" r="3.5" />
@@ -84,28 +82,22 @@ export function Navbar({ onOpenBooking }) {
               </svg>
             </div>
             <div className="flex flex-col">
-              <span className={`font-editorial text-2xl font-bold tracking-tight transition-colors leading-none group-hover:text-[#E3A725] ${
-                isScrolled ? 'text-[#1A1D21]' : 'text-white'
-              }`}>
+              <span className="font-editorial text-2xl font-bold tracking-tight transition-colors leading-none text-white group-hover:text-[#E3A725]">
                 OLYMPIC HOTEL
               </span>
-              <span className={`text-[10px] tracking-[0.25em] uppercase font-semibold mt-0.5 ${
-                isScrolled ? 'text-[#969592]' : 'text-[#E3A725]/90'
-              }`}>
+              <span className="text-[10px] tracking-[0.25em] uppercase font-semibold mt-0.5 text-[#E3A725]/90">
                 GONDAR • ETHIOPIA
               </span>
             </div>
           </a>
 
-          {/* Desktop Navigation Links */}
+          {/* Desktop Navigation Links - Uniform crisp white text with gold hover */}
           <nav className="hidden lg:flex items-center gap-7">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-semibold transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#E3A725] hover:after:w-full after:transition-all ${
-                  isScrolled ? 'text-[#1A1D21]/90 hover:text-[#E3A725]' : 'text-white/95 hover:text-[#E3A725] drop-shadow-sm font-medium'
-                }`}
+                className="text-sm font-semibold transition-colors relative py-1 text-white/95 hover:text-[#E3A725] drop-shadow-sm after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#E3A725] hover:after:w-full after:transition-all"
               >
                 {link.name}
               </a>
@@ -135,9 +127,7 @@ export function Navbar({ onOpenBooking }) {
             </a>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`p-2 rounded-full transition-colors hover:bg-white/10 ${
-                isScrolled ? 'text-[#1A1D21] hover:text-[#E3A725]' : 'text-white hover:text-[#E3A725]'
-              }`}
+              className="p-2 rounded-full transition-colors text-white hover:text-[#E3A725] hover:bg-white/10"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -147,10 +137,10 @@ export function Navbar({ onOpenBooking }) {
 
         {/* Mobile Glassmorphic Dropdown */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mx-4 my-3 bg-[#FAF8F3]/95 backdrop-blur-2xl rounded-3xl border border-white/60 p-6 shadow-2xl animate-in slide-in-from-top-3 duration-200 text-[#1A1D21]">
+          <div className="lg:hidden mx-4 my-3 bg-[#0A0D0F]/95 backdrop-blur-2xl rounded-3xl border border-[#E3A725]/30 p-6 shadow-2xl animate-in slide-in-from-top-3 duration-200 text-white">
             <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between pb-3 border-b border-black/5">
-                <span className="text-[11px] uppercase tracking-widest text-[#969592] font-bold">Navigation</span>
+              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                <span className="text-[11px] uppercase tracking-widest text-[#E3A725]/80 font-bold">Navigation</span>
                 <span className="text-xs text-[#E3A725] font-semibold">Maraki Campus Area</span>
               </div>
               {navLinks.map((link) => (
@@ -158,12 +148,12 @@ export function Navbar({ onOpenBooking }) {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-base font-semibold text-[#1A1D21] hover:text-[#E3A725] transition-colors py-1"
+                  className="text-base font-semibold text-white/90 hover:text-[#E3A725] transition-colors py-1"
                 >
                   {link.name}
                 </a>
               ))}
-              <div className="pt-4 border-t border-black/5 flex flex-col gap-3">
+              <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
                 <a
                   href="#reserve"
                   onClick={(e) => {
@@ -176,7 +166,7 @@ export function Navbar({ onOpenBooking }) {
                 </a>
                 <a
                   href={`tel:${hotelInfo.phonePrimary}`}
-                  className="w-full rounded-full py-3 text-sm font-semibold text-center text-[#1A1D21] bg-white/80 border border-[#E3A725]/40 transition-colors"
+                  className="w-full rounded-full py-3 text-sm font-semibold text-center text-white bg-white/10 hover:bg-white/15 border border-[#E3A725]/40 transition-colors"
                 >
                   Call Reception: {hotelInfo.phonePrimary}
                 </a>
