@@ -34,7 +34,7 @@ export function Hero({ onOpenBooking, onSearchAvailability }) {
     <>
       <section 
         id="hero" 
-        className="relative w-full h-screen min-h-[680px] flex flex-col items-center justify-center overflow-hidden bg-stone-900"
+        className="relative w-full h-screen min-h-[700px] flex flex-col items-center justify-center overflow-hidden bg-stone-900 pt-20 sm:pt-24"
       >
         {/* Grand Architectural Hotel Lobby Background Image */}
         <div className="absolute inset-0 z-0">
