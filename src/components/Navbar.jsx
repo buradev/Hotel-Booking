@@ -32,8 +32,12 @@ export function Navbar({ onOpenBooking }) {
 
   return (
     <>
-      {/* Top micro announcement bar */}
-      <div className="bg-[#081A13]/95 backdrop-blur-md text-[#FAF8F3] text-xs py-2 px-4 border-b border-[#E3A725]/30 relative z-50">
+      {/* Top micro announcement bar - transparent on hero, collapses on scroll */}
+      <div className={`transition-all duration-300 overflow-hidden relative z-50 ${
+        isScrolled 
+          ? 'max-h-0 opacity-0 py-0 border-none' 
+          : 'max-h-12 opacity-100 bg-black/30 backdrop-blur-md text-[#FAF8F3] text-xs py-2 px-4 border-b border-white/10'
+      }`}>
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 text-[#E3A725] font-medium tracking-wide">
@@ -58,18 +62,18 @@ export function Navbar({ onOpenBooking }) {
         </div>
       </div>
 
-      {/* Main Glassmorphic Sticky Header */}
+      {/* Main Ultra-Transparent Glassmorphic Sticky Header (Style 1 - Sheer Crystal Glass) */}
       <header className={`sticky top-0 z-40 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-[#FAF8F3]/90 backdrop-blur-2xl shadow-[0_10px_35px_rgba(26,29,33,0.06)] border-b border-[#E3A725]/20 py-3 text-[#1A1D21]' 
-          : 'bg-black/30 backdrop-blur-md shadow-none border-b border-white/10 py-4 text-white'
+          ? 'bg-white/35 backdrop-blur-2xl shadow-[0_8px_30px_rgba(26,29,33,0.05)] border-b border-white/40 py-3 text-[#1A1D21]' 
+          : 'bg-transparent backdrop-blur-[2px] shadow-none border-b border-white/10 py-4 text-white'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           
           {/* Logo & Brand Identity */}
           <a href="#hero" className="flex items-center gap-3 group">
             <div className={`w-10 h-10 rounded-full border-2 border-[#E3A725] flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform ${
-              isScrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-black/40 backdrop-blur-md'
+              isScrolled ? 'bg-white/40 backdrop-blur-md' : 'bg-black/30 backdrop-blur-md'
             }`}>
               <svg className="w-6 h-6 text-[#E3A725]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="6" cy="9" r="3.5" />

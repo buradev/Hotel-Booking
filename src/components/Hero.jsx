@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ArrowUpRight } from 'lucide-react';
 
 export function Hero({ onOpenBooking }) {
   const handleBookingClick = (e) => {
@@ -91,6 +91,22 @@ export function Hero({ onOpenBooking }) {
           DISCOVER
         </span>
         <ChevronDown className="w-5 h-5 text-[#E3A725] animate-bounce" />
+      </a>
+
+      {/* Bottom-Right Corner Widget: Explore Rooms ↗ */}
+      <a
+        href="#rooms"
+        onClick={(e) => {
+          e.preventDefault();
+          const roomsEl = document.getElementById('rooms');
+          if (roomsEl) roomsEl.scrollIntoView({ behavior: 'smooth' });
+        }}
+        className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-20 group flex items-center gap-2 bg-black/60 hover:bg-black/85 backdrop-blur-md border border-[#E3A725]/50 hover:border-[#E3A725] px-4 sm:px-5 py-2.5 sm:py-3 rounded-full shadow-[0_4px_25px_rgba(0,0,0,0.5)] transition-all duration-300 hover:scale-105 active:scale-95"
+      >
+        <span className="text-xs sm:text-sm font-semibold tracking-wider text-white group-hover:text-[#E3A725] transition-colors">
+          Explore Rooms
+        </span>
+        <ArrowUpRight className="w-4 h-4 text-[#E3A725] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
       </a>
     </section>
   );
